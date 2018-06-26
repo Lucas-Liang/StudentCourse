@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.example.ssh.Pojo">
+	<class name="com.example.ssh.Pojo.User" table="User">
+	<!-- 设置数据库中的相关的字段 -->
+		<id name="u_id" column="u_id">
+			<generator class="native">
+			</generator>
+		</id>
+		<property name="u_usename" column="u_usename" length="20"/>
+		<property name="u_password" column="u_password" length="20"/>
+		<property name="u_power" column="u_power" length="20"/>
+		<property name="u_powercode" column="u_powercode" length="10"/>
+		<property name="u_name" column="u_name" length="10"/>
+		
+		<set name="course" lazy="false">
+         <key column="u_id" not-null="false"></key>
+         <one-to-many class="com.example.ssh.Pojo.Course"/>
+        </set>
+        
+        <set name="choiceCourseInfo" lazy="false">
+         <key column="u_id" not-null="false"></key>
+         <one-to-many class="com.example.ssh.Pojo.ChoiceCourseInfo"/>
+        </set>
+	</class>
+	
+</hibernate-mapping>

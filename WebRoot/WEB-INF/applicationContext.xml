@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="
+   http://www.springframework.org/schema/beans 
+   http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+   http://www.springframework.org/schema/aop 
+   http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+   http://www.springframework.org/schema/tx 
+   http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+   http://www.springframework.org/schema/context      
+   http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+ <!-- 数据库的相关操作 -->
+ 	<!-- 配置连接池 -->
+   	<bean name="ds"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://localhost:3306/manager?characterEncoding=UTF-8" />
+		<property name="username" value="root" />
+		<property name="password" value="123456" />
+	</bean>
+	
+	<bean name="sf"
+		class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<property name="dataSource" ref="ds" />
+		<property name="mappingResources">
+			<list>
+				<value>com/example/ssh/Pojo/User.hbm.xml</value>
+				<value>com/example/ssh/Pojo/Course.hbm.xml</value>
+				<value>com/example/ssh/Pojo/ChoiceCourseInfo.hbm.xml</value>
+			</list>
+		</property>
+		
+	    <property name="schemaUpdate">  
+	        <value>true</value>  
+	    </property>  
+	    		
+		<property name="hibernateProperties">
+			<value>
+				hibernate.dialect=org.hibernate.dialect.MySQLDialect
+				hibernate.show_sql=true
+				hbm2ddl.auto=update
+   			</value>
+		</property>
+	</bean> 
+		
+ 	<!-- 配置Action层的东西 -->
+ 	<bean id="userAction" class="com.example.ssh.Action.UserAction" scope="prototype">
+ 		<property name="userService" ref="userService"/>
+ 	</bean>
+ 	<bean id="schoolAction" class="com.example.ssh.Action.SchoolAction" scope="prototype">
+ 		<property name="schoolService" ref="schoolService"/>
+ 	</bean>
+ 	<bean id="classAction" class="com.example.ssh.Action.ClassAction" scope="prototype">
+ 		<property name="classService" ref="classService"/>
+ 	</bean>
+ 	<bean id="studentAction" class="com.example.ssh.Action.StudentAction" scope="prototype">
+ 		<property name="studentService" ref="studentService"/>
+ 	</bean>
+ 	
+ 	
+	<!-- 配置Services层的东西 -->
+ 	<bean id="userService" class="com.example.ssh.Service.UserService">
+ 		<property name="userDao" ref="userDao"/>
+ 	</bean>
+ 	<bean id="schoolService" class="com.example.ssh.Service.SchoolService">
+ 		<property name="schoolDao" ref="schoolDao"/>
+ 	</bean>
+ 	<bean id="classService" class="com.example.ssh.Service.ClassService">
+ 		<property name="classDao" ref="classDao"/>
+ 	</bean>
+ 	<bean id="studentService" class="com.example.ssh.Service.StudentService">
+ 		<property name="studentDao" ref="studentDao"/>
+ 	</bean>
+ 	
+ 	
+ 	
+ 	<!-- 配置DAO的类 -->
+ 	<bean id="userDao" class="com.example.ssh.Dao.UserDao">
+ 		 <property name="sessionFactory" ref="sf" />
+ 	</bean>
+ 	<bean id="schoolDao" class="com.example.ssh.Dao.SchoolDao">
+ 		 <property name="sessionFactory" ref="sf" />
+ 	</bean>
+ 	<bean id="classDao" class="com.example.ssh.Dao.ClassDao">
+ 		 <property name="sessionFactory" ref="sf" />
+ 	</bean>
+ 	<bean id="studentDao" class="com.example.ssh.Dao.StudentDao">
+ 		 <property name="sessionFactory" ref="sf" />
+ 	</bean>
+ 	
+ 	
+ 	
+ 	<!-- 配置事务管理器 -->
+ 	<bean name="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+ 		 <property name="sessionFactory" ref="sf"/>
+ 	</bean>
+ 	<!--开始注解事务  -->
+ 	<tx:annotation-driven transaction-manager="transactionManager"/>
+	
+ 		
+</beans>
