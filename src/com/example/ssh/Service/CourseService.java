@@ -15,11 +15,11 @@ public class CourseService {
 		this.courseDao = courseDao;
 	}
 	/**
-	 * 分页查询
+	 * 分页查询（学生）
 	 * @param indexPage
 	 * @return
 	 */
-	public IndexPage<Course> findByPage(Integer indexPage) {
+	public IndexPage<Course> findByPageStudent(Integer indexPage) {
 		// TODO Auto-generated method stub
 		IndexPage<Course> inPage =new IndexPage<Course>();
 		inPage.setIndexPage(indexPage);
@@ -35,6 +35,30 @@ public class CourseService {
 		inPage.setList(list);
 		return inPage;
 	}
+	/**
+	 * 分页查询（老师）
+	 * @param indexPage
+	 * @return
+	 */
+	public IndexPage<Course> findByPageTeacher(Integer indexPage) {
+		// TODO Auto-generated method stub
+		IndexPage<Course> inPage =new IndexPage<Course>();
+		inPage.setIndexPage(indexPage);
+		int pageSize=3;
+		inPage.setPageSize(pageSize);
+		int pageCount =courseDao.findAllCountTeacher();
+		inPage.setPageCount(pageCount);
+		double num = pageCount;
+		Double indexCount =  Math.ceil(num/pageSize);
+		inPage.setIndexCount(indexCount.intValue());
+		int begin = (indexPage-1)*pageSize;
+		List<Course> list = courseDao.findByPage(begin,pageSize);
+		inPage.setList(list);
+		return inPage;
+	}
+	/**
+	 * 分页搜索（学生）
+	 * **/
 	public IndexPage<Course> findBySearch(String s_search, Integer indexPage) {
 		// TODO Auto-generated method stub
 		IndexPage<Course> inPage =new IndexPage<Course>();
@@ -52,18 +76,42 @@ public class CourseService {
 		System.out.println("----------->"+inPage);
 		return inPage;
 	}
+	/**
+	 * 分页搜索（老师）
+	 * **/
+	public IndexPage<Course> findBySearchTeacher(String s_search, Integer indexPage) {
+		// TODO Auto-generated method stub
+		IndexPage<Course> inPage =new IndexPage<Course>();
+		inPage.setIndexPage(indexPage);
+		int pageSize=3;
+		inPage.setPageSize(pageSize);
+		int pageCount =courseDao.findSearchCountTeacher(s_search);
+		inPage.setPageCount(pageCount);
+		double num = pageCount;
+		Double indexCount =  Math.ceil(num/pageSize);
+		inPage.setIndexCount(indexCount.intValue());
+		int begin = (indexPage-1)*pageSize;
+		List<Course> list = courseDao.findByPageSreachTeacher(begin,pageSize,s_search);
+		inPage.setList(list);
+		System.out.println("----------->"+inPage);
+		return inPage;
+	}
+	/**保存课程信息*/
 	public void add(Course course) {
 		// TODO Auto-generated method stub
 		courseDao.add(course);
 	}
-	public Course findById(Integer c_id) {
+	/**根据ID来查询课程*/
+	public Course findByIdCourse(Integer c_id) {
 		// TODO Auto-generated method stub
-		return courseDao.finById(c_id);
+		return courseDao.finByIdCourse(c_id);
 	}
+	/**修改课程信息*/
 	public void updata(Course course) {
 		// TODO Auto-generated method stub
 		courseDao.updata(course);
 	}
+	/**删除课程信息*/
 	public void delete(Course course) {
 		// TODO Auto-generated method stub
 		courseDao.delete(course);

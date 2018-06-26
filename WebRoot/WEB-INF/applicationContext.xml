@@ -18,7 +18,7 @@
    	<bean name="ds"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
-		<property name="url" value="jdbc:mysql://localhost:3306/manager?characterEncoding=UTF-8" />
+		<property name="url" value="jdbc:mysql://localhost:3306/School?characterEncoding=UTF-8" />
 		<property name="username" value="root" />
 		<property name="password" value="123456" />
 	</bean>
@@ -51,48 +51,35 @@
  	<bean id="userAction" class="com.example.ssh.Action.UserAction" scope="prototype">
  		<property name="userService" ref="userService"/>
  	</bean>
- 	<bean id="schoolAction" class="com.example.ssh.Action.SchoolAction" scope="prototype">
+ 	<bean id="courseAction" class="com.example.ssh.Action.CourseAction" scope="prototype">
  		<property name="schoolService" ref="schoolService"/>
  	</bean>
- 	<bean id="classAction" class="com.example.ssh.Action.ClassAction" scope="prototype">
+ 	<bean id="choiceCourseInfoAction" class="com.example.ssh.Action.ChoiceCourseInfoAction" scope="prototype">
  		<property name="classService" ref="classService"/>
- 	</bean>
- 	<bean id="studentAction" class="com.example.ssh.Action.StudentAction" scope="prototype">
- 		<property name="studentService" ref="studentService"/>
- 	</bean>
- 	
+ 	</bean>	
  	
 	<!-- 配置Services层的东西 -->
  	<bean id="userService" class="com.example.ssh.Service.UserService">
  		<property name="userDao" ref="userDao"/>
  	</bean>
- 	<bean id="schoolService" class="com.example.ssh.Service.SchoolService">
+ 	<bean id="courseService" class="com.example.ssh.Service.CourseService">
  		<property name="schoolDao" ref="schoolDao"/>
  	</bean>
- 	<bean id="classService" class="com.example.ssh.Service.ClassService">
+ 	<bean id="choiceCourseInfoService" class="com.example.ssh.Service.ChoiceCourseInfoService">
  		<property name="classDao" ref="classDao"/>
  	</bean>
- 	<bean id="studentService" class="com.example.ssh.Service.StudentService">
- 		<property name="studentDao" ref="studentDao"/>
- 	</bean>
- 	
- 	
+
  	
  	<!-- 配置DAO的类 -->
  	<bean id="userDao" class="com.example.ssh.Dao.UserDao">
  		 <property name="sessionFactory" ref="sf" />
  	</bean>
- 	<bean id="schoolDao" class="com.example.ssh.Dao.SchoolDao">
+ 	<bean id="courseDao" class="com.example.ssh.Dao.CourseDao">
  		 <property name="sessionFactory" ref="sf" />
  	</bean>
- 	<bean id="classDao" class="com.example.ssh.Dao.ClassDao">
+ 	<bean id="choiceCourseInfoDao" class="com.example.ssh.Dao.ChoiceCourseInfoDao">
  		 <property name="sessionFactory" ref="sf" />
- 	</bean>
- 	<bean id="studentDao" class="com.example.ssh.Dao.StudentDao">
- 		 <property name="sessionFactory" ref="sf" />
- 	</bean>
- 	
- 	
+ 	</bean> 	
  	
  	<!-- 配置事务管理器 -->
  	<bean name="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
@@ -101,5 +88,4 @@
  	<!--开始注解事务  -->
  	<tx:annotation-driven transaction-manager="transactionManager"/>
 	
- 		
 </beans>

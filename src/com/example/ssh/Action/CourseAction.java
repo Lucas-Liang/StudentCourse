@@ -43,16 +43,25 @@ public class CourseAction extends ActionSupport implements ModelDriven<Course>{
 		this.courseService = courseService;
 	}
 	/**
-	 * 查看所有的课程信息
+	 * 查看所有的课程信息(学生)
 	 * @return
 	 */
-	public String findAll() {
-		IndexPage<Course> index = courseService.findByPage(IndexPage);
+	public String findAllStudent() {
+		IndexPage<Course> index = courseService.findByPageStudent(IndexPage);
 		ActionContext.getContext().getValueStack().push(index);
 		return "findAll";
 	}
 	/**
-	 * 搜索课程信息
+	 * 查看所有的课程信息(当前老师的账户老师)
+	 * @return
+	 */
+	public String findAllTeacher() {
+		IndexPage<Course> index = courseService.findByPageTeacher(IndexPage);
+		ActionContext.getContext().getValueStack().push(index);
+		return "findAll";
+	}
+	/**
+	 * 搜索课程信息（学生）
 	 * @return
 	 */
 	public String search() throws UnsupportedEncodingException {
@@ -63,15 +72,27 @@ public class CourseAction extends ActionSupport implements ModelDriven<Course>{
 		return "search";
 	}
 	/**
+	 * 搜索课程信息（老师）
+	 * @return
+	 */
+	public String searchTeacher() throws UnsupportedEncodingException {
+		String c = ServletActionContext.getRequest().getParameter("c_search");   //获取用户名  
+		String c_search = new String(c.getBytes("iso-8859-1"),"UTF-8");
+		IndexPage<Course> search = courseService.findBySearchTeacher(c_search,IndexPage);
+		ActionContext.getContext().getValueStack().push(search);
+		return "search";
+	}
+	
+	
+	/**
 	 * 保存课程信息(老师权限)
 	 * @return
 	 */
-	public String save() {
-		
+	public String saveCourse() {
 		User user = (User)ServletActionContext.getRequest().getAttribute("user");
 		course.setUser(user);
 		courseService.add(course);
-		IndexPage<Course> index = courseService.findByPage(IndexPage);
+		IndexPage<Course> index = courseService.findByPageTeacher(IndexPage);
 		ActionContext.getContext().getValueStack().push(index);
 		return "findAll";
 	}
@@ -83,27 +104,32 @@ public class CourseAction extends ActionSupport implements ModelDriven<Course>{
 		return "add";
 	}
 	/**
-	 * 根据Id来查询School
+	 * 根据Id来查询课程
 	 * @return
 	 */
-	public String edit() {
+	public String editCourse() {
 		String s = ServletActionContext.getRequest().getParameter("c_id");     
 		int c_id = Integer.parseInt(s);
-		course = courseService.findById(c_id);
+		course = courseService.findByIdCourse(c_id);
 		return "edit";
 	}
-	public String update() {
+	/**
+	 * 修改课程信息（老师权限）
+	 * @return
+	 */
+	public String updateCourse() {
 		courseService.updata(course);
-		IndexPage<Course> index = courseService.findByPage(IndexPage);
+		IndexPage<Course> index = courseService.findByPageTeacher(IndexPage);
 		ActionContext.getContext().getValueStack().push(index);
 		return "findAll";
 	}
-	
+	/**
+	 * 删除课程信息（老师权限）
+	 * @return
+	 */
 	public String delete() {
-//		String s = ServletActionContext.getRequest().getParameter("c_id");   //获取用户名  
-//		int c_id = Integer.parseInt(s);
 		courseService.delete(course);
-		IndexPage<Course> index = courseService.findByPage(IndexPage);
+		IndexPage<Course> index = courseService.findByPageTeacher(IndexPage);
 		ActionContext.getContext().getValueStack().push(index);
 		return "findAll";
 	}
