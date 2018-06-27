@@ -26,11 +26,9 @@ import com.sun.org.apache.bcel.internal.generic.NEW;
 
 
 public class CourseAction extends ActionSupport implements ModelDriven<Course>{
-	
 	private Course course =new Course();
 	private CourseService courseService;
 	private Integer IndexPage =1;
-	
 	@Override
 	public Course getModel() {
 		// TODO Auto-generated method stub
