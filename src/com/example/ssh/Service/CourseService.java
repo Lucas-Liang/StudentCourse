@@ -3,7 +3,6 @@ package com.example.ssh.Service;
 import java.util.List;
 
 import com.example.ssh.Dao.CourseDao;
-import com.example.ssh.Dao.SchoolDao;
 import com.example.ssh.Pojo.Course;
 import com.example.ssh.Pojo.IndexPage;
 
@@ -23,7 +22,7 @@ public class CourseService {
 		// TODO Auto-generated method stub
 		IndexPage<Course> inPage =new IndexPage<Course>();
 		inPage.setIndexPage(indexPage);
-		int pageSize=3;
+		int pageSize=6;
 		inPage.setPageSize(pageSize);
 		int pageCount =courseDao.findAllCount();
 		inPage.setPageCount(pageCount);
@@ -44,7 +43,7 @@ public class CourseService {
 		// TODO Auto-generated method stub
 		IndexPage<Course> inPage =new IndexPage<Course>();
 		inPage.setIndexPage(indexPage);
-		int pageSize=3;
+		int pageSize=6;
 		inPage.setPageSize(pageSize);
 		int pageCount =courseDao.findAllCountTeacher();
 		inPage.setPageCount(pageCount);
@@ -52,7 +51,7 @@ public class CourseService {
 		Double indexCount =  Math.ceil(num/pageSize);
 		inPage.setIndexCount(indexCount.intValue());
 		int begin = (indexPage-1)*pageSize;
-		List<Course> list = courseDao.findByPage(begin,pageSize);
+		List<Course> list = courseDao.findByPageTeacher(begin,pageSize);
 		inPage.setList(list);
 		return inPage;
 	}
@@ -63,7 +62,7 @@ public class CourseService {
 		// TODO Auto-generated method stub
 		IndexPage<Course> inPage =new IndexPage<Course>();
 		inPage.setIndexPage(indexPage);
-		int pageSize=3;
+		int pageSize=6;
 		inPage.setPageSize(pageSize);
 		int pageCount =courseDao.findSearchCount(s_search);
 		inPage.setPageCount(pageCount);
@@ -83,7 +82,7 @@ public class CourseService {
 		// TODO Auto-generated method stub
 		IndexPage<Course> inPage =new IndexPage<Course>();
 		inPage.setIndexPage(indexPage);
-		int pageSize=3;
+		int pageSize=6;
 		inPage.setPageSize(pageSize);
 		int pageCount =courseDao.findSearchCountTeacher(s_search);
 		inPage.setPageCount(pageCount);

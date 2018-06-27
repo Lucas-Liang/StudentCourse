@@ -14,10 +14,11 @@ public class UserDao  extends HibernateDaoSupport{
 	public User findByUsernameAndPassword(User user) {
 		// TODO Auto-generated method stub
 		System.out.println("开始执行登录验证.....");
-		String hqlString = "from User where u_usename= ? and u_password= ? ";
-		System.out.println(hqlString);
+		System.out.println(""+user.getU_usename());
+		String hqlString = "from User where u_usename=? and u_password=? ";
 		List<User> list =this.getHibernateTemplate().find(hqlString,user.getU_usename(),user.getU_password());
 		System.out.println("12"+list.size());
+		
 		if(list.size()>0){
 			return list.get(0);
 		}
@@ -33,6 +34,7 @@ public class UserDao  extends HibernateDaoSupport{
 //			设置老师的权限
 			users.setU_power(0);
 		}else {
+			users.setU_powercode(null);
 //			设置学生的权限
 			users.setU_power(1);
 		}

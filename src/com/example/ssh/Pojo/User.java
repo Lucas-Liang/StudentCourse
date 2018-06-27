@@ -10,17 +10,17 @@ public class User {
 	private String u_powercode;//权限授权码
 	private String u_name;//姓名
 	private Set<Course> course;
-	private ChoiceCourseInfo choiceCourseInfo;
+	private Set<ChoiceCourseInfo> choiceCourseInfo;
+	
+
 	
 	
-	public ChoiceCourseInfo getChoiceCourseInfo() {
+	public Set<ChoiceCourseInfo> getChoiceCourseInfo() {
 		return choiceCourseInfo;
 	}
-	public void setChoiceCourseInfo(ChoiceCourseInfo choiceCourseInfo) {
+	public void setChoiceCourseInfo(Set<ChoiceCourseInfo> choiceCourseInfo) {
 		this.choiceCourseInfo = choiceCourseInfo;
 	}
-	
-	
 	public Set<Course> getCourse() {
 		return course;
 	}

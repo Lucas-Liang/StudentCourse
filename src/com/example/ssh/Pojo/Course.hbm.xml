@@ -20,7 +20,7 @@
 		 column="u_id">
         </many-to-one> 
         
-         <set name="choiceCourseInfo" lazy="false">
+        <set name="choiceCourseInfo" lazy="false">
          <key column="c_id" not-null="false"></key>
          <one-to-many class="com.example.ssh.Pojo.ChoiceCourseInfo"/>
         </set>

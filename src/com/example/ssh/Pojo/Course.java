@@ -1,5 +1,7 @@
 package com.example.ssh.Pojo;
 
+import java.util.Set;
+
 public class Course {
 	
 	private Integer c_id;//课程id
@@ -9,16 +11,15 @@ public class Course {
 	private Integer c_numChoice;//选择的人数
 	private String c_statu;//课程状态
 	private User  user;
-	private ChoiceCourseInfo choiceCourseInfo;
+	private Set<ChoiceCourseInfo> choiceCourseInfo;
 	
 	
-	public ChoiceCourseInfo getChoiceCourseInfo() {
+	public Set<ChoiceCourseInfo> getChoiceCourseInfo() {
 		return choiceCourseInfo;
 	}
-	public void setChoiceCourseInfo(ChoiceCourseInfo choiceCourseInfo) {
+	public void setChoiceCourseInfo(Set<ChoiceCourseInfo> choiceCourseInfo) {
 		this.choiceCourseInfo = choiceCourseInfo;
 	}
-	
 	public Integer getC_id() {
 		return c_id;
 	}

@@ -49,7 +49,7 @@ public class CourseAction extends ActionSupport implements ModelDriven<Course>{
 	public String findAllStudent() {
 		IndexPage<Course> index = courseService.findByPageStudent(IndexPage);
 		ActionContext.getContext().getValueStack().push(index);
-		return "findAll";
+		return "findAllStudent";
 	}
 	/**
 	 * 查看所有的课程信息(当前老师的账户老师)
@@ -58,7 +58,7 @@ public class CourseAction extends ActionSupport implements ModelDriven<Course>{
 	public String findAllTeacher() {
 		IndexPage<Course> index = courseService.findByPageTeacher(IndexPage);
 		ActionContext.getContext().getValueStack().push(index);
-		return "findAll";
+		return "findAllTeacher";
 	}
 	/**
 	 * 搜索课程信息（学生）
@@ -69,7 +69,7 @@ public class CourseAction extends ActionSupport implements ModelDriven<Course>{
 		String c_search = new String(c.getBytes("iso-8859-1"),"UTF-8");
 		IndexPage<Course> search = courseService.findBySearch(c_search,IndexPage);
 		ActionContext.getContext().getValueStack().push(search);
-		return "search";
+		return "Search";
 	}
 	/**
 	 * 搜索课程信息（老师）
@@ -80,7 +80,7 @@ public class CourseAction extends ActionSupport implements ModelDriven<Course>{
 		String c_search = new String(c.getBytes("iso-8859-1"),"UTF-8");
 		IndexPage<Course> search = courseService.findBySearchTeacher(c_search,IndexPage);
 		ActionContext.getContext().getValueStack().push(search);
-		return "search";
+		return "SearchTeacher";
 	}
 	
 	
@@ -89,12 +89,14 @@ public class CourseAction extends ActionSupport implements ModelDriven<Course>{
 	 * @return
 	 */
 	public String saveCourse() {
-		User user = (User)ServletActionContext.getRequest().getAttribute("user");
+		User user =(User)ServletActionContext.getRequest().getSession().getAttribute("User");
 		course.setUser(user);
+		course.setC_numChoice(0);
+		course.setC_statu("未报满");
 		courseService.add(course);
 		IndexPage<Course> index = courseService.findByPageTeacher(IndexPage);
 		ActionContext.getContext().getValueStack().push(index);
-		return "findAll";
+		return "findAllTeacher";
 	}
 	/**
 	 * 跳转到添加课程的页面(老师)
@@ -118,10 +120,12 @@ public class CourseAction extends ActionSupport implements ModelDriven<Course>{
 	 * @return
 	 */
 	public String updateCourse() {
+		User user =(User)ServletActionContext.getRequest().getSession().getAttribute("User");
+		course.setUser(user);
 		courseService.updata(course);
 		IndexPage<Course> index = courseService.findByPageTeacher(IndexPage);
 		ActionContext.getContext().getValueStack().push(index);
-		return "findAll";
+		return "findAllTeacher";
 	}
 	/**
 	 * 删除课程信息（老师权限）
@@ -131,7 +135,7 @@ public class CourseAction extends ActionSupport implements ModelDriven<Course>{
 		courseService.delete(course);
 		IndexPage<Course> index = courseService.findByPageTeacher(IndexPage);
 		ActionContext.getContext().getValueStack().push(index);
-		return "findAll";
+		return "findAllTeacher";
 	}
 	
 	

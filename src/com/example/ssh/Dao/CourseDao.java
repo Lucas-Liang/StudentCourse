@@ -3,6 +3,8 @@ package com.example.ssh.Dao;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.apache.struts2.ServletActionContext;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -11,7 +13,6 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import com.example.ssh.Pojo.Course;
 import com.example.ssh.Pojo.User;
-import com.example.ssh.Service.SchoolService;
 
 
 public class CourseDao extends HibernateDaoSupport{
@@ -33,10 +34,11 @@ public class CourseDao extends HibernateDaoSupport{
 	 * @return
 	 */
 	public int findAllCountTeacher() {
-		User user = (User)ServletActionContext.getRequest().getAttribute("user");
+		User user = (User)ServletActionContext.getRequest().getSession().getAttribute("User");
 		String hpl ="select  count(*) from Course where u_id="+user.getU_id();
 		List <Long> list = this.getHibernateTemplate().find(hpl);
 		if(list.size()>0){
+			System.out.println("------>"+list.get(0).intValue());
 			return list.get(0).intValue();
 		}
 		return 0;
@@ -50,6 +52,9 @@ public class CourseDao extends HibernateDaoSupport{
 	public List<Course> findByPage(int begin, int pageSize) {
 		DetachedCriteria criteria =DetachedCriteria.forClass(Course.class);
 		List<Course> list = this.getHibernateTemplate().findByCriteria(criteria, begin, pageSize);
+		for (int i = 0; i < list.size(); i++) {
+			list.get(i).setUser(findByIDUser(list.get(i).getUser().getU_id()));
+		}
 		return list;
 		// TODO Auto-generated method stub	
 	}
@@ -60,16 +65,21 @@ public class CourseDao extends HibernateDaoSupport{
 	 * @return
 	 */
 	public List<Course> findByPageTeacher(int begin, int pageSize) {
-		User user = (User)ServletActionContext.getRequest().getAttribute("user");
-		DetachedCriteria criteria =DetachedCriteria.forClass(Course.class);
-		List<Course> list = this.getHibernateTemplate().findByCriteria(criteria, begin, pageSize);
-		List<Course> list1 =new ArrayList<Course>();
-		for(int i = 0;i<list.size();i++){
-			if(list.get(i).getUser().getU_id()==user.getU_id()){
-				list1.add(list.get(i));
-			}
+		User user = (User)ServletActionContext.getRequest().getSession().getAttribute("User");
+		Session session = null;
+		// 获取被Spring托管的session
+		session = this.getHibernateTemplate().getSessionFactory().openSession();
+		String hqlString = "FROM  Course  WHERE u_id="+user.getU_id();
+		List<Course> list = new  ArrayList<Course>();
+		Query query = session.createQuery(hqlString);
+		query.setMaxResults(pageSize);
+		query.setFirstResult(begin); 
+		list = query.list();
+		for (int i = 0; i < list.size(); i++) {
+			list.get(i).setUser(findByIDUser(list.get(i).getUser().getU_id()));
 		}
-		return list1;
+		return list;
+		
 	}
 	/**
 	 * 搜索的查询总数（学生）
@@ -78,7 +88,7 @@ public class CourseDao extends HibernateDaoSupport{
 	 */
 	public int findSearchCount(String s_search) {
 		// TODO Auto-generated method stub
-		String hpl ="select  count(*) from Class where c_name like '%"+s_search+"%' or c_info like '%"+s_search+"%' ";
+		String hpl ="select  count(*) from Course where c_name like '%"+s_search+"%' or c_info like '%"+s_search+"%' ";
 		List <Long> list = this.getHibernateTemplate().find(hpl);
 		if(list.size()>0){
 			System.out.println("/*********"+list.get(0).intValue()+"********/");
@@ -93,8 +103,8 @@ public class CourseDao extends HibernateDaoSupport{
 	 */
 	public int findSearchCountTeacher(String s_search) {
 		// TODO Auto-generated method stub
-		User user = (User)ServletActionContext.getRequest().getAttribute("user");
-		String hpl ="select  count(*) from Class where c_name like '%"+s_search+"%' or c_info like '%"+s_search+"%' and u_id="+user.getU_id();
+		 User user = (User)ServletActionContext.getRequest().getSession().getAttribute("User");
+		String hpl ="select  count(*) from Course where c_name like '%"+s_search+"%' or c_info like '%"+s_search+"%' and u_id="+user.getU_id();
 		List <Long> list = this.getHibernateTemplate().find(hpl);
 		if(list.size()>0){
 			return list.get(0).intValue();
@@ -119,7 +129,7 @@ public class CourseDao extends HibernateDaoSupport{
 		list = query.list();
 		for (int i = 0; i < list.size(); i++) {
 			User user = (User)ServletActionContext.getRequest().getAttribute("user");
-			list.get(i).setUser(user);
+			list.get(i).setUser(findByIDUser(list.get(i).getUser().getU_id()));
 		}
 		
 		return list;
@@ -130,11 +140,11 @@ public class CourseDao extends HibernateDaoSupport{
 	 * @return
 	 */
 	public List<Course> findByPageSreachTeacher(int begin, int pageSize, String c_search) {
-		User user = (User)ServletActionContext.getRequest().getAttribute("user");
+		 User user = (User)ServletActionContext.getRequest().getSession().getAttribute("User");
 		Session session = null;
         // 获取被Spring托管的session
         session = this.getHibernateTemplate().getSessionFactory().openSession();
-		String hqlString = "FROM  Course  WHERE c_name LIKE '%"+c_search+"%' OR c_info LIKE '%"+c_search+"%' and u_id="+user.getU_id();
+		String hqlString = "FROM  Course  WHERE c_name LIKE '%"+c_search+"%' and u_id="+user.getU_id();
 		List<Course> list = new  ArrayList<Course>();
 		Query query = session.createQuery(hqlString);
 		query.setMaxResults(pageSize);
@@ -143,7 +153,6 @@ public class CourseDao extends HibernateDaoSupport{
 		for (int i = 0; i < list.size(); i++) {
 			list.get(i).setUser(user);
 		}
-		
 		return list;
 	}
 	/**保存课程信息*/
@@ -166,6 +175,12 @@ public class CourseDao extends HibernateDaoSupport{
 	public void delete(Course class1) {
 		// TODO Auto-generated method stub
 		this.getHibernateTemplate().delete(class1);
+	}
+	
+	public User findByIDUser(Integer id) {
+		// TODO Auto-generated method stub
+		User user = this.getHibernateTemplate().get(User.class, id);
+		return user;
 	}
 
 }

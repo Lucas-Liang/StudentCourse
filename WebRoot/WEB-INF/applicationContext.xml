@@ -52,22 +52,18 @@
  		<property name="userService" ref="userService"/>
  	</bean>
  	<bean id="courseAction" class="com.example.ssh.Action.CourseAction" scope="prototype">
- 		<property name="schoolService" ref="schoolService"/>
+ 		<property name="courseService" ref="courseService"/>
  	</bean>
- 	<bean id="choiceCourseInfoAction" class="com.example.ssh.Action.ChoiceCourseInfoAction" scope="prototype">
- 		<property name="classService" ref="classService"/>
- 	</bean>	
+ 	
  	
 	<!-- 配置Services层的东西 -->
  	<bean id="userService" class="com.example.ssh.Service.UserService">
  		<property name="userDao" ref="userDao"/>
  	</bean>
  	<bean id="courseService" class="com.example.ssh.Service.CourseService">
- 		<property name="schoolDao" ref="schoolDao"/>
+ 		<property name="courseDao" ref="courseDao"/>
  	</bean>
- 	<bean id="choiceCourseInfoService" class="com.example.ssh.Service.ChoiceCourseInfoService">
- 		<property name="classDao" ref="classDao"/>
- 	</bean>
+ 	
 
  	
  	<!-- 配置DAO的类 -->
@@ -77,14 +73,13 @@
  	<bean id="courseDao" class="com.example.ssh.Dao.CourseDao">
  		 <property name="sessionFactory" ref="sf" />
  	</bean>
- 	<bean id="choiceCourseInfoDao" class="com.example.ssh.Dao.ChoiceCourseInfoDao">
- 		 <property name="sessionFactory" ref="sf" />
- 	</bean> 	
+ 	
  	
  	<!-- 配置事务管理器 -->
  	<bean name="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
  		 <property name="sessionFactory" ref="sf"/>
  	</bean>
+ 	
  	<!--开始注解事务  -->
  	<tx:annotation-driven transaction-manager="transactionManager"/>
 	

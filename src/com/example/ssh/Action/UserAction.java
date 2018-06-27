@@ -30,9 +30,9 @@ public class UserAction extends ActionSupport implements ModelDriven<User>{
 		if(user==null){
 //			登录失败
 			this.addActionError("用户名和密码错误！！");
-			return INPUT;
+			return "Error";
 		}else {
-			if(user.getU_power()==0){
+			if(user.getU_power()==0&&user.getU_power()!=null){
 //				老师用户的登录的界面
 				ActionContext.getContext().getSession().put("User",user);
 				return "Teacher";
@@ -46,9 +46,9 @@ public class UserAction extends ActionSupport implements ModelDriven<User>{
 		System.out.println("/**********保存**********/");
 		boolean rs = userService.save(users);
 		if(rs){
-			return "Login";
+			return "Error";
 		}else {
-			return INPUT;
+			return "Error";
 		}
 	}
 	public String update(){

@@ -4,10 +4,8 @@
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
-
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
-
 <head >
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -22,39 +20,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
    
    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
    <script src="${pageContext.request.contextPath }/js/jquery-1.8.3.js"></script>
-  	<script type="text/javascript">
-		
-  		//获取所有省份
-  		function ajaxSchoolList(){
-  			$("#school").empty();//清空  
-  			var url = "<%=basePath%>class_AjaxSchoolList.action";
-  			$("#school").append("<option id='' value=''>---请选择学校---</option>");  
-  			
-  			$.ajax({
-  				type : "post",  
-		        url : url,  
-		        data : {},  
-		        dataType : "JSON",  
-		        success : function(data) {  
-		           var json = eval(data); //数组     
-                   var tt = ""; 
-                 
-                    for(var n=0;n<data.length;n++){  
-		              var ids=data[n].s_id;  //省份id
-		                var names=data[n].s_name;  //省份名称
-		                $("#school").append("<option id='"+ids+"' value='"+ids+"'>"+names+"</option>");  
-		              } 
-       			 }  
-  			
-  			});
-  		}
-  		
-  		  
-  	</script>
 </head>
-<body  onload="ajaxSchoolList()">
-     
-     
+<body>
+      
     <div id="wrapper">
          <div class="navbar navbar-inverse navbar-fixed-top">
             <div class="adjust-nav">
@@ -82,19 +50,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             <div class="sidebar-collapse">
                 <ul class="nav" id="main-menu">
                 
-                    <li >
-                        <a href="school_findAll" ><i class="fa fa-desktop "></i>学校管理 </a>
+                    <li class="active-link" >
+                        <a href="course_findAllTeacher.action" ><i class="fa fa-desktop "></i>课程管理 </a>
                     </li>
-                   
-
-                    <li class="active-link">
-                        <a href=""><i class="fa fa-table "></i>班级管理 </a>
+                    <li >
+                        <a href=""><i class="fa fa-table "></i>查看选课 </a>
                     </li>
                     <li>
-                        <a href="student_findAll"><i class="fa fa-edit "></i>学生管理 </a>
+                        <a href="user_update"><i class="fa fa-edit "></i>修改个人信息 </a>
                     </li>                    
                 </ul>
-                            </div>
+           </div>
 
         </nav>
         <!-- /. NAV SIDE  -->
@@ -112,46 +78,60 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     <div class="col-md-12">
                         <ul class="breadcrumb">
 							<li>
-								<a href="class_findAll.action">学校信息管理  </a><span class="divider"></span>
+								<a href="course_findAllTeacher.action">查看全部课程</a><span class="divider"></span>
+							</li>
+							<li>
+								<a href="course_add.action">添加课程</a><span class="divider"></span>
 							</li>
 							<li class="active">
-							添加学校信息<span class="divider"></span>
+								修改课程信息<span class="divider"></span>
 							</li>
 						</ul>
                     </div>
                 </div>
-                <!-- /. ROW  -->
                 <hr>
-                
+                <!-- /. ROW  -->
+                <div class="row">
+                    <div class="col-md-12">
+                       <div class="alert alert-info">
+                             <strong>当前修改课程为:<s:property value="model.c_name"/></strong>
+                        </div>
+                    </div>
+                </div>
+                <hr>
                 <div class="row">
                     <div class="col-lg-6 col-md-6">
-                        <h3 class="text-info">添加学校信息</h3>
+                        <h3 class="text-info">修改课程信息</h3>
 						<br>
-							<s:form action ="class_save" method = "post" namespace ="/" them ="simple">
+							<s:form action ="course_updateCourse" method = "post" namespace ="/" them ="simple">
+								<s:hidden name="c_id" value="%{model.c_id}" />
+								<s:hidden name="u_id" value="%{model.user.u_id}" />
+								<s:hidden name="c_numChoice" value="%{model.c_numChoice}" />
+								<s:hidden name="c_statu" value="%{model.c_statu}" />
 								<div class="control-group">
 									<div class="controls">
-						 				<label for="name" class="control-label">选择学校</label>
-										 <select class="form-control" id="school" name="s_id">
-										
-										 </select>
+						 			<label class="control-label" for="inputEmail">课程名称<s:property value="%{model.user.u_id}" /></label>
+						 			<input id="inputEmail" type="text" name="c_name" class="form-control" value="<s:property value="%{model.c_name}" />"/>
 									</div>
 								</div>
 								<div class="control-group">
 									<div class="controls">
-						 			<label class="control-label" for="inputEmail">班级名称</label>
-						 			<input id="inputEmail" type="text" name="c_name" class="form-control"/>
+						 			<label class="control-label" for="inputEmail">课程介绍</label>
+						 			<input id="inputEmail" type="text" name="c_info" class="form-control" value="<s:property value="%{model.c_info}" />"/>
 									</div>
 								</div>
 								<div class="control-group">
-					        <div class="controls">
-						      <label class="control-label" for="inputPassword">班级简介</label>
-						     <input id="inputPassword" type="text" name="c_info" class="form-control"/>
-							</div>
-					
+									<div class="controls">
+						 				<label for="name" class="control-label"> 上课人数</label>
+										<input id="inputEmail" type="text" name="c_num" class="form-control"  readonly  unselectable="on" value="<s:property value="%{model.c_num}" />"/>
+									</div>
+								</div>
+								
+					      
 						<br>
 				   			<div class="control-group">
 							<div class="controls">
-						  <button type="submit" class="btn">添加</button>
+						  <button type="submit" class="btn">修改</button>
 							</div>
 				</div>
 				
@@ -200,9 +180,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 </div>
         </div>
         </div>
-          
-
-     <!-- /. WRAPPER  -->
+    <!-- /. WRAPPER  -->
     <!-- SCRIPTS -AT THE BOTOM TO REDUCE THE LOAD TIME-->
     <!-- JQUERY SCRIPTS -->
     <script src="assets/js/jquery-1.10.2.js"></script>

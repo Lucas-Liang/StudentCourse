@@ -4,7 +4,6 @@
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -48,9 +47,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<h2>注 册</h2>
 			<s:form action ="user_save" method = "post" namespace ="/" them ="simple">
 				<input type="text" Name="u_usename" placeholder="用户名" required="">
-				<input type="text" Name="u_mail" placeholder="邮箱" required="">
 				<input type="password" Name="u_password" placeholder="密码" required="">
-				<input type="text" Name="u_phone" placeholder="手机号码" required="">
+				<input type="text" Name="u_powercode" placeholder="权限授权码" required="">
 			
 			<div class="send-button w3layouts agileits">
 				

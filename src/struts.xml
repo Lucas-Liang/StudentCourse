@@ -9,25 +9,22 @@
     <package name="basicstruts" extends="struts-default" namespace="/">
   
  		<action name="user_*" class="userAction" method="{1}">
- 			<result name="input">/login.jsp</result>
+ 			<result name="Error">/login.jsp</result>
+ 			<result name="Student" type="chain">course_findAllStudent</result>
+ 			<result name="Teacher" type="chain">course_findAllTeacher</result>
  			<result name="success_login">/login.jsp</result>
- 			<result name="success" type="chain">/login.jsp</result>
   		</action>
-  		
-  		
   		<action name="course_*" class="courseAction" method="{1}">
- 			<result name="findAll">/index.jsp</result>
- 			<result name="search">/index.jsp</result>
- 			<result name="add">/add_school.jsp</result>
- 			<result name="edit">/edit_school.jsp</result>
+ 			<result name="findAllStudent">/Student.jsp</result>
+ 			<result name="Search">/Student.jsp</result>
+ 			<result name="findAllTeacher">/Teacher.jsp</result>
+ 			<result name="SearchTeacher">/Teacher.jsp</result>
+ 			<result name="add">/add_course.jsp</result>
+ 			<result name="edit">/edit_course.jsp</result>
   		</action>
   		
-  	    <action name="ccourseInfo_*" class="choiceCourseInfoAction" method="{1}">
- 			<result name="findAll">/class.jsp</result>
- 			<result name="search">/class.jsp</result>
- 			<result name="add">/add_class.jsp</result>
- 			<result name="edit">/edit_class.jsp</result>
-  		</action>
+  		
+  		
   	
  	</package>
 </struts>
